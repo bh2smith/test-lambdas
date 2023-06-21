@@ -46,7 +46,7 @@ docker run -p 9000:8080 --env DATABASE_URL=${DATABASE_URL} ${IMAGE_NAME}
 docker run -p 9000:8080 --add-host=localhost:host-gateway --env DATABASE_URL=${DATABASE_URL} ${IMAGE_NAME}
 
 # 3. Invoke the lambda function
-curl -XPOST ${FUNCTION_URL} -d '{"txHash": "Hello", "solver": "World"}'
+curl -XPOST ${FUNCTION_URL} -d '{"txHash": "0x42"}'
 ```
 # Create & Publish to Container Registry
 
@@ -68,12 +68,12 @@ Once the functionURL is acquired try to invoke it as following:
 then
 
 ```shell
-export REMOTE_URL=
+export LAMBDA_URL=
 
 curl -XPOST \
-      ${REMOTE_URL} \
+      ${LAMBDA_URL} \
       -H 'content-type: application/json' \
-      -d '{"txHash": "Hello", "solver": "World"}'
+      -d '{"txHash": "0x42"}'
 ```
 
 
@@ -81,5 +81,5 @@ curl -XPOST \
 
 Some things encountered during this process:
 
-- Had to coordinate with devops aboout Role & Permissions
+- Had to coordinate with devops about Role & Permissions
 - Test (event) input does not agree with input coming from functionURL (must append some SSL stuff).
