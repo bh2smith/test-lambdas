@@ -8,16 +8,15 @@ Tinkering with AWS lambda functions in multiple languages.
 Instructions borrowed from: https://docs.aws.amazon.com/lambda/latest/dg/typescript-image.html
 
 ### Local Test
-1. Run the "server"
+
 ```sh
+# 1. Run the "server"
 cd node
 export IMAGE_NAME=node-lambda
 docker build -t ${IMAGE_NAME} .
-docker run -p 9000:8080 ${IMAGE_NAME}
-```
-2. Invoke via Function URL
+docker run -p 9000:8080 --env TEST_VAR=<secret> ${IMAGE_NAME}
 
-```sh
+# 2. Invoke via Function URL
  export FUNCTION_URL=http://localhost:9000/2015-03-31/functions/function/invocations
 curl -XPOST ${FUNCTION_URL} -d '{"x": 1, "y": 2}'
 ```
@@ -54,8 +53,7 @@ curl -XPOST ${FUNCTION_URL} -d '{"txHash": "0x42"}'
 # Using env vars specified in .env_publish
 aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_URL}
 aws ecr create-repository --repository-name ${IMAGE_NAME} --region ${AWS_REGION} --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
-docker tag ${IMAGE_NAME}:latest ${AWS_URL}/${IMAGE_NAME}:latest
-docker push ${AWS_URL}/${IMAGE_NAME}:latest 
+docker tag ${IMAGE_NAME}:latest ${AWS_URL}/${IMAGE_NAME}:latest & docker push ${AWS_URL}/${IMAGE_NAME}:latest 
 ```
 
 ## Create Lambda from Image
