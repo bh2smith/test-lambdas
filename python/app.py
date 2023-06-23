@@ -4,6 +4,11 @@ import os
 from src.db_client import PgClient
 
 
+import base64
+
+
+
+
 def handler(event, context):
     """
     Strange issue where locally and when testing in 
@@ -17,7 +22,8 @@ def handler(event, context):
     
     # TODO - this is a hacky way of handling both event types.
     if "body" in event:
-        event = json.loads(event["body"])
+        encoded_string = event["body"]
+        event = json.loads(base64.b64decode(encoded_string))
     print("Body", event)
     
     db = PgClient(os.environ.get("DATABASE_URL"))
